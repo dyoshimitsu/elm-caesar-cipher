@@ -1,4 +1,4 @@
-module Caesar exposing (encode, int2let, let2int, shift, table)
+module Caesar exposing (encode, int2let, let2int, percent, shift, table)
 
 
 let2int : Char -> Int
@@ -29,3 +29,8 @@ encode n xs =
 table : List Float
 table =
     [ 8.1, 1.5, 2.8, 4.2, 12.7, 2.2, 2.0, 6.1, 7.0, 0.2, 0.8, 4.0, 2.4, 6.7, 7.5, 1.9, 0.1, 6.0, 6.3, 9.0, 2.8, 1.0, 2.4, 0.2, 2.0, 0.1 ]
+
+
+percent : Int -> Int -> Float
+percent n m =
+    toFloat n / toFloat m * 100
