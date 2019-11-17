@@ -1,4 +1,4 @@
-module Caesar exposing (count, encode, int2let, let2int, lowers, percent, shift, table)
+module Caesar exposing (count, encode, freqs, int2let, let2int, lowers, percent, shift, table)
 
 
 let2int : Char -> Int
@@ -44,3 +44,12 @@ lowers xs =
 count : Char -> String -> Int
 count c xs =
     List.length <| List.filter (\n -> n == c) <| String.toList xs
+
+
+freqs : String -> List Float
+freqs xs =
+    let
+        n =
+            lowers xs
+    in
+    List.map (\x -> percent (count x xs) n) (String.toList "abcdefghijklmnopqrstuvwxyz")
