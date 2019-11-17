@@ -1,4 +1,4 @@
-module Caesar exposing (count, encode, freqs, int2let, let2int, lowers, percent, shift, table)
+module Caesar exposing (chisqr, count, encode, freqs, int2let, let2int, lowers, percent, shift, table)
 
 
 let2int : Char -> Int
@@ -53,3 +53,8 @@ freqs xs =
             lowers xs
     in
     List.map (\x -> percent (count x xs) n) (String.toList "abcdefghijklmnopqrstuvwxyz")
+
+
+chisqr : List Float -> List Float -> Float
+chisqr os es =
+    List.sum <| List.map (\( o, e ) -> ((o - e) ^ 2) / e) <| List.map2 Tuple.pair os es
