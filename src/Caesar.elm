@@ -1,4 +1,4 @@
-module Caesar exposing (encode, int2let, let2int, percent, shift, table)
+module Caesar exposing (encode, int2let, let2int, lowers, percent, shift, table)
 
 
 let2int : Char -> Int
@@ -34,3 +34,8 @@ table =
 percent : Int -> Int -> Float
 percent n m =
     toFloat n / toFloat m * 100
+
+
+lowers : String -> Int
+lowers xs =
+    List.length <| List.filter (\n -> n >= 'a' && n <= 'z') <| String.toList xs
