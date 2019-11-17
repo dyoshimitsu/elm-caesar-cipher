@@ -1,4 +1,4 @@
-module Caesar exposing (int2let, let2int)
+module Caesar exposing (int2let, let2int, shift)
 
 
 let2int : Char -> Int
@@ -9,3 +9,13 @@ let2int c =
 int2let : Int -> Char
 int2let n =
     Char.fromCode (Char.toCode 'a' + n)
+
+
+shift : Int -> Char -> Char
+shift n c =
+    case Char.isLower c of
+        True ->
+            int2let <| modBy 26 <| let2int c + n
+
+        _ ->
+            c
