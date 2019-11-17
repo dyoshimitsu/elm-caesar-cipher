@@ -1,4 +1,4 @@
-module Caesar exposing (chisqr, count, encode, freqs, int2let, let2int, lowers, percent, shift, table)
+module Caesar exposing (chisqr, count, encode, freqs, int2let, let2int, lowers, percent, rotate, shift, table)
 
 
 let2int : Char -> Int
@@ -58,3 +58,8 @@ freqs xs =
 chisqr : List Float -> List Float -> Float
 chisqr os es =
     List.sum <| List.map (\( o, e ) -> ((o - e) ^ 2) / e) <| List.map2 Tuple.pair os es
+
+
+rotate : Int -> List a -> List a
+rotate n xs =
+    List.drop n xs ++ List.take n xs
