@@ -1,4 +1,4 @@
-module Caesar exposing (int2let, let2int, shift)
+module Caesar exposing (encode, int2let, let2int, shift)
 
 
 let2int : Char -> Int
@@ -19,3 +19,8 @@ shift n c =
 
         _ ->
             c
+
+
+encode : Int -> String -> String
+encode n xs =
+    String.fromList <| List.map (shift n) <| String.toList xs
