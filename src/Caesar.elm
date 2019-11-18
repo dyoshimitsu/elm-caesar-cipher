@@ -83,7 +83,6 @@ crack : String -> String
 crack xs =
     let
         factor =
-            -- List.head (positions 0 chitab)
             List.head (positions (Maybe.withDefault 0.0 (List.minimum chitab)) chitab)
 
         chitab =
