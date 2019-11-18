@@ -1,4 +1,4 @@
-module Caesar exposing (chisqr, count, encode, freqs, int2let, let2int, lowers, percent, positions, rotate, shift, table)
+module Caesar exposing (crack)
 
 
 let2int : Char -> Int
@@ -77,3 +77,19 @@ positions y xs =
         )
     <|
         List.indexedMap Tuple.pair xs
+
+
+crack : String -> String
+crack xs =
+    let
+        factor =
+            -- List.head (positions 0 chitab)
+            List.head (positions (Maybe.withDefault 0.0 (List.minimum chitab)) chitab)
+
+        chitab =
+            List.map (\n -> chisqr (rotate n table2) table) <| List.range 0 25
+
+        table2 =
+            freqs xs
+    in
+    encode -(Maybe.withDefault 0 factor) xs
