@@ -68,8 +68,8 @@ rotate n xs =
 positions : a -> List a -> List Int
 positions y xs =
     List.filterMap
-        (\( i, z ) ->
-            if y == z then
+        (\( i, x ) ->
+            if y == x then
                 Just i
 
             else
