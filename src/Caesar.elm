@@ -1,4 +1,4 @@
-module Caesar exposing (chisqr, count, encode, freqs, int2let, let2int, lowers, percent, rotate, shift, table)
+module Caesar exposing (chisqr, count, encode, freqs, int2let, let2int, lowers, percent, positions, rotate, shift, table)
 
 
 let2int : Char -> Int
@@ -63,3 +63,17 @@ chisqr os es =
 rotate : Int -> List a -> List a
 rotate n xs =
     List.drop n xs ++ List.take n xs
+
+
+positions : a -> List a -> List Int
+positions y xs =
+    List.filterMap
+        (\( i, z ) ->
+            if y == z then
+                Just i
+
+            else
+                Nothing
+        )
+    <|
+        List.indexedMap Tuple.pair xs
