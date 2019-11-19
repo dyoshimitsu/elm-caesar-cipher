@@ -8,17 +8,16 @@ let2int c =
 
 int2let : Int -> Char
 int2let n =
-    Char.fromCode (Char.toCode 'a' + n)
+    Char.fromCode <| Char.toCode 'a' + n
 
 
 shift : Int -> Char -> Char
 shift n c =
-    case Char.isLower c of
-        True ->
-            int2let <| modBy 26 <| let2int c + n
+    if Char.isLower c then
+        int2let <| modBy 26 <| let2int c + n
 
-        _ ->
-            c
+    else
+        c
 
 
 encode : Int -> String -> String
@@ -43,7 +42,12 @@ lowers xs =
 
 count : Char -> String -> Int
 count c xs =
-    List.length <| List.filter (\n -> n == c) <| String.toList xs
+    String.length <| String.filter ((==) c) xs
+
+
+lowerAlphabets : List Char
+lowerAlphabets =
+    List.map (\n -> Char.fromCode n) <| List.range (Char.toCode 'a') (Char.toCode 'z')
 
 
 freqs : String -> List Float
@@ -52,12 +56,12 @@ freqs xs =
         n =
             lowers xs
     in
-    List.map (\x -> percent (count x xs) n) (String.toList "abcdefghijklmnopqrstuvwxyz")
+    List.map (\x -> percent (count x xs) n) lowerAlphabets
 
 
 chisqr : List Float -> List Float -> Float
 chisqr os es =
-    List.sum <| List.map (\( o, e ) -> ((o - e) ^ 2) / e) <| List.map2 Tuple.pair os es
+    List.sum <| List.map2 (\o e -> ((o - e) ^ 2) / e) os es
 
 
 rotate : Int -> List a -> List a
@@ -83,7 +87,7 @@ crack : String -> String
 crack xs =
     let
         factor =
-            List.head (positions (Maybe.withDefault 0.0 (List.minimum chitab)) chitab)
+            List.head <| positions (Maybe.withDefault 0.0 <| List.minimum chitab) chitab
 
         chitab =
             List.map (\n -> chisqr (rotate n table2) table) <| List.range 0 25
