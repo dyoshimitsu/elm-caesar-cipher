@@ -84,11 +84,11 @@ view model =
             , option [] [ text <| String.fromInt 25 ]
             , option [] [ text <| String.fromInt 26 ]
             ]
-        , input [] []
+        , input [ placeholder "plaintext" ] []
         , button [ onClick (Encode 0 "") ] [ text "Encode" ]
         , div [] []
         , text "Crack"
-        , input [] []
+        , input [ placeholder "ciphertext" ] []
         , button [ onClick (Crack "") ] [ text "Crack" ]
         , div [] [ text model ]
         ]
