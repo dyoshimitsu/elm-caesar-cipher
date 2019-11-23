@@ -42,10 +42,10 @@ update : Msg -> Model -> Model
 update msg model =
     case msg of
         Encode shift plaintext ->
-            Caesar.encode shift string
+            Caesar.encode shift plaintext
 
         Crack ciphertext ->
-            Caesar.crack string
+            Caesar.crack ciphertext
 
 
 
