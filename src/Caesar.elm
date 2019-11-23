@@ -1,4 +1,4 @@
-module Caesar exposing (crack)
+module Caesar exposing (crack, encode)
 
 
 let2int : Char -> Int
