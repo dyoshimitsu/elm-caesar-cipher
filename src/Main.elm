@@ -2,7 +2,7 @@ module Main exposing (main)
 
 import Browser
 import Caesar exposing (crack, encode)
-import Html exposing (Html, button, div, input, option, select, text)
+import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onInput)
 
@@ -55,7 +55,8 @@ update msg model =
 view : Model -> Html Msg
 view model =
     div []
-        [ text "Encode"
+        [ h1 [] [ text "Caesar cipher" ]
+        , text "Encode"
         , select []
             [ option [] [ text <| String.fromInt 1 ]
             , option [] [ text <| String.fromInt 2 ]
