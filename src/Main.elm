@@ -52,7 +52,9 @@ init =
 
 
 type Msg
-    = Encode Int String
+    = ShiftChange Int
+    | PlaintextChange String
+    | Encode Int String
     | CiphertextChange String
     | Crack String
 
@@ -60,6 +62,24 @@ type Msg
 update : Msg -> Model -> Model
 update msg model =
     case msg of
+        ShiftChange shift ->
+            { model
+                | encode =
+                    { shift = shift
+                    , plaintext = model.encode.plaintext
+                    , ciphertext = model.encode.ciphertext
+                    }
+            }
+
+        PlaintextChange plaintext ->
+            { model
+                | encode =
+                    { shift = model.encode.shift
+                    , plaintext = plaintext
+                    , ciphertext = model.encode.ciphertext
+                    }
+            }
+
         Encode shift plaintext ->
             { model
                 | encode =
@@ -123,8 +143,8 @@ view model =
             , option [] [ text <| String.fromInt 25 ]
             , option [] [ text <| String.fromInt 26 ]
             ]
-        , input [ placeholder "plaintext" ] []
-        , button [ onClick (Encode 0 "") ] [ text "Encode" ]
+        , input [ placeholder "plaintext", value model.encode.plaintext, onInput PlaintextChange ] []
+        , button [ onClick (Encode model.encode.shift model.encode.plaintext) ] [ text "Encode" ]
         , div [] [ text model.encode.ciphertext ]
         , h2 [] [ text "Crack" ]
         , input [ placeholder "ciphertext", value model.crack.ciphertext, onInput CiphertextChange ] []
