@@ -5497,6 +5497,27 @@ var $author$project$Caesar$crack = function (xs) {
 var $author$project$Main$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
+			case 'ShiftChange':
+				var shift = msg.a;
+				return _Utils_update(
+					model,
+					{
+						encode: {
+							ciphertext: model.encode.ciphertext,
+							plaintext: model.encode.plaintext,
+							shift: A2(
+								$elm$core$Maybe$withDefault,
+								0,
+								$elm$core$String$toInt(shift))
+						}
+					});
+			case 'PlaintextChange':
+				var plaintext = msg.a;
+				return _Utils_update(
+					model,
+					{
+						encode: {ciphertext: model.encode.ciphertext, plaintext: plaintext, shift: model.encode.shift}
+					});
 			case 'Encode':
 				var shift = msg.a;
 				var plaintext = msg.b;
@@ -5538,6 +5559,12 @@ var $author$project$Main$Encode = F2(
 	function (a, b) {
 		return {$: 'Encode', a: a, b: b};
 	});
+var $author$project$Main$PlaintextChange = function (a) {
+	return {$: 'PlaintextChange', a: a};
+};
+var $author$project$Main$ShiftChange = function (a) {
+	return {$: 'ShiftChange', a: a};
+};
 var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
@@ -5554,6 +5581,23 @@ var $elm$html$Html$Events$on = F2(
 			event,
 			$elm$virtual_dom$VirtualDom$Normal(decoder));
 	});
+var $elm$json$Json$Decode$field = _Json_decodeField;
+var $elm$json$Json$Decode$at = F2(
+	function (fields, decoder) {
+		return A3($elm$core$List$foldr, $elm$json$Json$Decode$field, decoder, fields);
+	});
+var $elm$json$Json$Decode$string = _Json_decodeString;
+var $elm$html$Html$Events$targetValue = A2(
+	$elm$json$Json$Decode$at,
+	_List_fromArray(
+		['target', 'value']),
+	$elm$json$Json$Decode$string);
+var $author$project$Main$onChange = function (handler) {
+	return A2(
+		$elm$html$Html$Events$on,
+		'change',
+		A2($elm$json$Json$Decode$map, handler, $elm$html$Html$Events$targetValue));
+};
 var $elm$html$Html$Events$onClick = function (msg) {
 	return A2(
 		$elm$html$Html$Events$on,
@@ -5573,17 +5617,6 @@ var $elm$html$Html$Events$stopPropagationOn = F2(
 			event,
 			$elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
 	});
-var $elm$json$Json$Decode$field = _Json_decodeField;
-var $elm$json$Json$Decode$at = F2(
-	function (fields, decoder) {
-		return A3($elm$core$List$foldr, $elm$json$Json$Decode$field, decoder, fields);
-	});
-var $elm$json$Json$Decode$string = _Json_decodeString;
-var $elm$html$Html$Events$targetValue = A2(
-	$elm$json$Json$Decode$at,
-	_List_fromArray(
-		['target', 'value']),
-	$elm$json$Json$Decode$string);
 var $elm$html$Html$Events$onInput = function (tagger) {
 	return A2(
 		$elm$html$Html$Events$stopPropagationOn,
@@ -5608,6 +5641,9 @@ var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
 var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
 var $author$project$Main$view = function (model) {
+	var handler = function (selectedValue) {
+		return $author$project$Main$ShiftChange(selectedValue);
+	};
 	return A2(
 		$elm$html$Html$div,
 		_List_Nil,
@@ -5629,223 +5665,34 @@ var $author$project$Main$view = function (model) {
 					])),
 				A2(
 				$elm$html$Html$select,
-				_List_Nil,
 				_List_fromArray(
 					[
-						A2(
-						$elm$html$Html$option,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$elm$core$String$fromInt(1))
-							])),
-						A2(
-						$elm$html$Html$option,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$elm$core$String$fromInt(2))
-							])),
-						A2(
-						$elm$html$Html$option,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$elm$core$String$fromInt(3))
-							])),
-						A2(
-						$elm$html$Html$option,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$elm$core$String$fromInt(4))
-							])),
-						A2(
-						$elm$html$Html$option,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$elm$core$String$fromInt(5))
-							])),
-						A2(
-						$elm$html$Html$option,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$elm$core$String$fromInt(6))
-							])),
-						A2(
-						$elm$html$Html$option,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$elm$core$String$fromInt(7))
-							])),
-						A2(
-						$elm$html$Html$option,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$elm$core$String$fromInt(8))
-							])),
-						A2(
-						$elm$html$Html$option,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$elm$core$String$fromInt(9))
-							])),
-						A2(
-						$elm$html$Html$option,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$elm$core$String$fromInt(0))
-							])),
-						A2(
-						$elm$html$Html$option,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$elm$core$String$fromInt(11))
-							])),
-						A2(
-						$elm$html$Html$option,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$elm$core$String$fromInt(12))
-							])),
-						A2(
-						$elm$html$Html$option,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$elm$core$String$fromInt(13))
-							])),
-						A2(
-						$elm$html$Html$option,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$elm$core$String$fromInt(14))
-							])),
-						A2(
-						$elm$html$Html$option,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$elm$core$String$fromInt(15))
-							])),
-						A2(
-						$elm$html$Html$option,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$elm$core$String$fromInt(16))
-							])),
-						A2(
-						$elm$html$Html$option,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$elm$core$String$fromInt(17))
-							])),
-						A2(
-						$elm$html$Html$option,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$elm$core$String$fromInt(18))
-							])),
-						A2(
-						$elm$html$Html$option,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$elm$core$String$fromInt(19))
-							])),
-						A2(
-						$elm$html$Html$option,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$elm$core$String$fromInt(20))
-							])),
-						A2(
-						$elm$html$Html$option,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$elm$core$String$fromInt(21))
-							])),
-						A2(
-						$elm$html$Html$option,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$elm$core$String$fromInt(22))
-							])),
-						A2(
-						$elm$html$Html$option,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$elm$core$String$fromInt(23))
-							])),
-						A2(
-						$elm$html$Html$option,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$elm$core$String$fromInt(24))
-							])),
-						A2(
-						$elm$html$Html$option,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$elm$core$String$fromInt(25))
-							])),
-						A2(
-						$elm$html$Html$option,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$elm$core$String$fromInt(26))
-							]))
-					])),
+						$author$project$Main$onChange(handler)
+					]),
+				A2(
+					$elm$core$List$map,
+					function (n) {
+						return A2(
+							$elm$html$Html$option,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$value(
+									$elm$core$String$fromInt(n))
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text(
+									$elm$core$String$fromInt(n))
+								]));
+					},
+					A2($elm$core$List$range, 1, 26))),
 				A2(
 				$elm$html$Html$input,
 				_List_fromArray(
 					[
-						$elm$html$Html$Attributes$placeholder('plaintext')
+						$elm$html$Html$Attributes$placeholder('plaintext'),
+						$elm$html$Html$Attributes$value(model.encode.plaintext),
+						$elm$html$Html$Events$onInput($author$project$Main$PlaintextChange)
 					]),
 				_List_Nil),
 				A2(
@@ -5853,7 +5700,7 @@ var $author$project$Main$view = function (model) {
 				_List_fromArray(
 					[
 						$elm$html$Html$Events$onClick(
-						A2($author$project$Main$Encode, 0, ''))
+						A2($author$project$Main$Encode, model.encode.shift, model.encode.plaintext))
 					]),
 				_List_fromArray(
 					[
