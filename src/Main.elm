@@ -127,11 +127,11 @@ view model =
         , h2 [] [ text "Encode" ]
         , select [ onChange handler ]
             (List.range 1 26 |> List.map (\n -> option [ value (String.fromInt n) ] [ text (String.fromInt n) ]))
-        , input [ placeholder "plaintext", value model.encode.plaintext, onInput PlaintextChange ] []
+        , textarea [ placeholder "plaintext", value model.encode.plaintext, onInput PlaintextChange ] []
         , button [ onClick (Encode model.encode.shift model.encode.plaintext) ] [ text "Encode" ]
         , div [] [ text model.encode.ciphertext ]
         , h2 [] [ text "Crack" ]
-        , input [ placeholder "ciphertext", value model.crack.ciphertext, onInput CiphertextChange ] []
+        , textarea [ placeholder "ciphertext", value model.crack.ciphertext, onInput CiphertextChange ] []
         , button [ onClick (Crack model.crack.ciphertext) ] [ text "Crack" ]
         , div [] [ text model.crack.decryption ]
         ]
