@@ -21,19 +21,29 @@ main =
 
 
 type alias Model =
-    { shift : Int
-    , plaintext : String
-    , ciphertext : String
-    , decryption : String
+    { encode :
+        { shift : Int
+        , plaintext : String
+        , ciphertext : String
+        }
+    , crack :
+        { ciphertext : String
+        , decryption : String
+        }
     }
 
 
 init : Model
 init =
-    { shift = 0
-    , plaintext = ""
-    , ciphertext = ""
-    , decryption = ""
+    { encode =
+        { shift = 0
+        , plaintext = ""
+        , ciphertext = ""
+        }
+    , crack =
+        { ciphertext = ""
+        , decryption = ""
+        }
     }
 
 
@@ -43,6 +53,7 @@ init =
 
 type Msg
     = Encode Int String
+    | CiphertextChange String
     | Crack String
 
 
@@ -51,13 +62,28 @@ update msg model =
     case msg of
         Encode shift plaintext ->
             { model
-                | shift = shift
-                , plaintext = plaintext
-                , ciphertext = Caesar.encode shift plaintext
+                | encode =
+                    { shift = shift
+                    , plaintext = plaintext
+                    , ciphertext = Caesar.encode shift plaintext
+                    }
+            }
+
+        CiphertextChange ciphertext ->
+            { model
+                | crack =
+                    { ciphertext = ciphertext
+                    , decryption = model.crack.decryption
+                    }
             }
 
         Crack ciphertext ->
-            { model | decryption = Caesar.crack ciphertext }
+            { model
+                | crack =
+                    { ciphertext = model.crack.ciphertext
+                    , decryption = Caesar.crack ciphertext
+                    }
+            }
 
 
 
@@ -99,9 +125,9 @@ view model =
             ]
         , input [ placeholder "plaintext" ] []
         , button [ onClick (Encode 0 "") ] [ text "Encode" ]
-        , div [] []
+        , div [] [ text model.encode.ciphertext ]
         , h2 [] [ text "Crack" ]
-        , input [ placeholder "ciphertext" ] []
-        , button [ onClick (Crack "") ] [ text "Crack" ]
-        , div [] [ text model.decryption ]
+        , input [ placeholder "ciphertext", value model.crack.ciphertext, onInput CiphertextChange ] []
+        , button [ onClick (Crack model.crack.ciphertext) ] [ text "Crack" ]
+        , div [] [ text model.crack.decryption ]
         ]
