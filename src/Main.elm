@@ -68,7 +68,7 @@ view : Model -> Html Msg
 view model =
     div []
         [ h1 [] [ text "Caesar cipher" ]
-        , text "Encode"
+        , h2 [] [ text "Encode" ]
         , select []
             [ option [] [ text <| String.fromInt 1 ]
             , option [] [ text <| String.fromInt 2 ]
@@ -100,7 +100,7 @@ view model =
         , input [ placeholder "plaintext" ] []
         , button [ onClick (Encode 0 "") ] [ text "Encode" ]
         , div [] []
-        , text "Crack"
+        , h2 [] [ text "Crack" ]
         , input [ placeholder "ciphertext" ] []
         , button [ onClick (Crack "") ] [ text "Crack" ]
         , div [] [ text model.decryption ]
