@@ -37,7 +37,7 @@ type alias Model =
 init : Model
 init =
     { encode =
-        { shift = 0
+        { shift = 1
         , plaintext = ""
         , ciphertext = ""
         }
@@ -93,6 +93,10 @@ update msg model =
                     , plaintext = plaintext
                     , ciphertext = Caesar.encode shift plaintext
                     }
+                , crack =
+                    { ciphertext = Caesar.encode shift plaintext
+                    , decryption = Caesar.crack <| Caesar.encode shift plaintext
+                    }
             }
 
         CiphertextChange ciphertext ->
@@ -125,13 +129,17 @@ view model =
     div []
         [ h1 [] [ text "Caesar cipher" ]
         , h2 [] [ text "Encode" ]
+        , textarea [ placeholder "plaintext", value model.encode.plaintext, onInput PlaintextChange ] []
+        , br [] []
+        , text "Shift : "
         , select [ onChange handler ]
             (List.range 1 26 |> List.map (\n -> option [ value (String.fromInt n) ] [ text (String.fromInt n) ]))
-        , textarea [ placeholder "plaintext", value model.encode.plaintext, onInput PlaintextChange ] []
+        , br [] []
         , button [ onClick (Encode model.encode.shift model.encode.plaintext) ] [ text "Encode" ]
         , div [] [ text model.encode.ciphertext ]
         , h2 [] [ text "Crack" ]
         , textarea [ placeholder "ciphertext", value model.crack.ciphertext, onInput CiphertextChange ] []
+        , br [] []
         , button [ onClick (Crack model.crack.ciphertext) ] [ text "Crack" ]
         , div [] [ text model.crack.decryption ]
         ]
