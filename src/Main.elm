@@ -21,12 +21,20 @@ main =
 
 
 type alias Model =
-    String
+    { shift : Int
+    , plaintext : String
+    , ciphertext : String
+    , decryption : String
+    }
 
 
 init : Model
 init =
-    ""
+    { shift = 0
+    , plaintext = ""
+    , ciphertext = ""
+    , decryption = ""
+    }
 
 
 
@@ -42,10 +50,14 @@ update : Msg -> Model -> Model
 update msg model =
     case msg of
         Encode shift plaintext ->
-            Caesar.encode shift plaintext
+            { model
+                | shift = shift
+                , plaintext = plaintext
+                , ciphertext = Caesar.encode shift plaintext
+            }
 
         Crack ciphertext ->
-            Caesar.crack ciphertext
+            { model | decryption = Caesar.crack ciphertext }
 
 
 
@@ -91,5 +103,5 @@ view model =
         , text "Crack"
         , input [ placeholder "ciphertext" ] []
         , button [ onClick (Crack "") ] [ text "Crack" ]
-        , div [] [ text model ]
+        , div [] [ text model.decryption ]
         ]
