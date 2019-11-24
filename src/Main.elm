@@ -4,7 +4,8 @@ import Browser
 import Caesar exposing (crack, encode)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onClick, onInput)
+import Html.Events exposing (on, onClick, onInput, targetValue)
+import Json.Decode
 
 
 main : Program () Model Msg
@@ -52,11 +53,16 @@ init =
 
 
 type Msg
-    = ShiftChange Int
+    = ShiftChange String
     | PlaintextChange String
     | Encode Int String
     | CiphertextChange String
     | Crack String
+
+
+onChange : (String -> msg) -> Attribute msg
+onChange handler =
+    on "change" (Json.Decode.map handler Html.Events.targetValue)
 
 
 update : Msg -> Model -> Model
@@ -65,7 +71,7 @@ update msg model =
         ShiftChange shift ->
             { model
                 | encode =
-                    { shift = shift
+                    { shift = Maybe.withDefault 0 (String.toInt shift)
                     , plaintext = model.encode.plaintext
                     , ciphertext = model.encode.ciphertext
                     }
@@ -112,37 +118,15 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
+    let
+        handler selectedValue =
+            ShiftChange selectedValue
+    in
     div []
         [ h1 [] [ text "Caesar cipher" ]
         , h2 [] [ text "Encode" ]
-        , select []
-            [ option [] [ text <| String.fromInt 1 ]
-            , option [] [ text <| String.fromInt 2 ]
-            , option [] [ text <| String.fromInt 3 ]
-            , option [] [ text <| String.fromInt 4 ]
-            , option [] [ text <| String.fromInt 5 ]
-            , option [] [ text <| String.fromInt 6 ]
-            , option [] [ text <| String.fromInt 7 ]
-            , option [] [ text <| String.fromInt 8 ]
-            , option [] [ text <| String.fromInt 9 ]
-            , option [] [ text <| String.fromInt 0 ]
-            , option [] [ text <| String.fromInt 11 ]
-            , option [] [ text <| String.fromInt 12 ]
-            , option [] [ text <| String.fromInt 13 ]
-            , option [] [ text <| String.fromInt 14 ]
-            , option [] [ text <| String.fromInt 15 ]
-            , option [] [ text <| String.fromInt 16 ]
-            , option [] [ text <| String.fromInt 17 ]
-            , option [] [ text <| String.fromInt 18 ]
-            , option [] [ text <| String.fromInt 19 ]
-            , option [] [ text <| String.fromInt 20 ]
-            , option [] [ text <| String.fromInt 21 ]
-            , option [] [ text <| String.fromInt 22 ]
-            , option [] [ text <| String.fromInt 23 ]
-            , option [] [ text <| String.fromInt 24 ]
-            , option [] [ text <| String.fromInt 25 ]
-            , option [] [ text <| String.fromInt 26 ]
-            ]
+        , select [ onChange handler ]
+            (List.range 1 26 |> List.map (\n -> option [ value (String.fromInt n) ] [ text (String.fromInt n) ]))
         , input [ placeholder "plaintext", value model.encode.plaintext, onInput PlaintextChange ] []
         , button [ onClick (Encode model.encode.shift model.encode.plaintext) ] [ text "Encode" ]
         , div [] [ text model.encode.ciphertext ]
